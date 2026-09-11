@@ -1,0 +1,19 @@
+# 외부 레포 자산 (SO-ARM100 의 SO101 시뮬 파일·STL). 스크립트로 재생성한다.
+scripts/_so101/
+
+# 논문 PDF. arXiv ID 가 파일명에 있어 언제든 다시 받을 수 있다.
+paper/
+
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+
+# 모델 가중치·데이터셋은 HF 캐시에 둔다 (CLAUDE.md)
+outputs/
+*.safetensors
+*.ckpt
+
+# macOS
+.DS_Store
