@@ -42,31 +42,55 @@ python3 scripts/so101_teleop.py --task MuJoCoPickLift-v1     # lift the cube
 python3 scripts/so101_teleop.py --task MuJoCoStackCube-v1 --seed 3
 ```
 
-Run it with any `python3`. It re-execs itself under `scripts/_so101/.venv`, and on macOS under `mjpython`,
-which the viewer needs.
+Run it with any `python3`; it re-execs itself under `scripts/_so101/.venv`. It prints the key table to the
+terminal on start.
+
+It opens one OpenCV window: a view from behind the base on the left, the wrist camera on the right, with
+the instruction, the gripper position and state, and the keys currently held drawn on top.
+**Keys go to that window** — click it once when it opens.
 
 | Key | |
 |---|---|
-| `w` `s` / `a` `d` / `r` `f` | move the end effector along x / y / z |
+| `w` `s` / `a` `d` / `r` `f` | move the end effector along x / y / z — away and back, left and right, up and down on screen |
 | `z` `x` / `t` `g` / `c` `v` | rotate about x / y / z |
 | `space` | toggle gripper |
 | `q` | reset the task (new layout) |
-| `ctrl-c` | quit |
+| `esc` | quit, or close the window |
 
-- **Keys are read from the terminal, not the viewer window.** The MuJoCo viewer already binds space,
-  backspace, the digits and most letters as shortcuts. After rotating the camera in the viewer, click the
-  terminal again. No macOS Accessibility permission is needed
-- Right after a reset the end effector sits 6 cm above the floor, so `f` barely moves it. Lift with `r` first
-- The SO-101 arm has five joints. Rotation about x and y works; rotation about z mixes with x, and any
-  rotation shifts the end effector by a few centimetres
+The SO-101 arm has five joints. Rotation about x and y works; rotation about z mixes with x, and any
+rotation shifts the end effector by a few centimetres.
 
 | Option | |
 |---|---|
 | `--task` | `MuJoCoTouch-v1` (default), `MuJoCoPickLift-v1`, `MuJoCoPickAndPlace-v1`, `MuJoCoStackCube-v1`, `MuJoCoLookAt-v1`, `MuJoCoMove-v1` |
+| `--view` | `angled` (default, from behind the base) or `overhead` (the straight-down camera the policy sees) |
 | `--pos-sensitivity` / `--rot-sensitivity` | translation / rotation speed, default 0.15 / 0.2 |
+| `--rotation-weight` | IK weight on orientation while a rotation key is held, default 0.1 |
 | `--hold` | how long one keypress keeps moving, default 0.15 s. Raise it if holding a key stutters |
-| `--demo` | play a fixed key sequence in the viewer, no keyboard needed |
-| `--selftest` | measure each key's translation and rotation without a viewer |
+| `--fps` | how often the window redraws, default 20. Physics runs at 50 Hz regardless |
+| `--no-wrist` | drop the wrist view, which halves the render cost |
+| `--mujoco-viewer` | use the MuJoCo viewer instead, with a mouse-orbit camera. Keys are then read from the terminal |
+| `--demo` | play a fixed key sequence, no keyboard needed |
+| `--selftest` | measure each key's translation and rotation without a window |
+| `--snapshot PNG` | save one window frame and exit |
+
+### Why the angled view
+
+The environment's own camera looks straight down, so moving up 8.6 cm with `r` shows as 1.3 cm on screen,
+and only `a` `d` — which swing the whole arm about its base — look like they move anything.
+
+### Why the IK orientation weight changes
+
+Moving uses the package default of 0.01; holding a rotation key raises it to 0.1. At 0.01 the rotation keys
+barely turn the gripper. At 0.1, moving from the folded reset pose pins `shoulder_lift` at its −100° limit
+and bends only the wrist, so `f` lifts the gripper instead of lowering it.
+
+### Why not the MuJoCo viewer
+
+The MuJoCo viewer binds all 26 letters to visualization shortcuts. `w` `s` `r` `g` toggle wireframe,
+shadow, reflection and fog, so typing into the viewer moves the arm *and* changes the rendering, and the
+passive viewer does not expose those flags to undo them. With `--mujoco-viewer`, type in the terminal,
+not in the viewer window.
 
 Measurements and the control scheme are in [docs/so101-sim.md](docs/so101-sim.md).
 

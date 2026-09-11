@@ -4,6 +4,7 @@
 # 1) TheRobotStudio/SO-ARM100 의 SO101 시뮬 파일과 STL 메시 (뷰어용)
 # 2) so101-nexus — SO-101 MuJoCo 태스크 6종 (PickLift, PickAndPlace, StackCube,
 #    Touch, LookAt, Move). PyPI 버전을 고정해 설치한다. Beta 라 API 가 자주 바뀐다.
+# 3) opencv-python — scripts/so101_teleop.py 가 화면을 보여주고 키를 받는 창
 #
 # 받은 파일과 venv 는 gitignore 되는 scripts/_so101/ 아래에 둔다.
 # 멱등적이다 — 이미 있는 것은 건너뛴다.
@@ -59,6 +60,10 @@ if [ "$have" != "$NEXUS_VERSION" ] || [ "$TELEOP" = 1 ]; then
   pip_install "so101-nexus${EXTRA}==$NEXUS_VERSION"
 else
   echo "==> so101-nexus $NEXUS_VERSION 있음, 건너뜀"
+fi
+if ! "$VENV/bin/python" -c "import cv2" >/dev/null 2>&1; then
+  echo "==> opencv-python 설치 (teleop 창)"
+  pip_install opencv-python
 fi
 
 # --- 3. 뷰어용 모델 파일 -----------------------------------------------------
@@ -133,7 +138,7 @@ cat <<EOF
 
   뷰어:        $RUNNER -m mujoco.viewer --mjcf=$DEST/scene.xml
   태스크 환경:  $VENV/bin/python -c "import gymnasium as gym, so101_nexus.mujoco; env = gym.make('MuJoCoPickLift-v1')"
-  키보드 조종:  python3 $ROOT/scripts/so101_teleop.py   (--task, --demo, --selftest)
+  키보드 조종:  python3 $ROOT/scripts/so101_teleop.py   (--task, --demo, --selftest, --mujoco-viewer)
 EOF
 if [ "$TELEOP" = 1 ]; then
   echo "  텔레오퍼레이션: $VENV/bin/so101-nexus teleop --leader-port <리더 암 포트>"
