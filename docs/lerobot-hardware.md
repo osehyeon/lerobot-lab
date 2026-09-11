@@ -65,6 +65,7 @@ LeRobot이 다른 학습 라이브러리와 갈라지는 지점이 이 층이다
 
 ### 하드웨어
 - 부품표(BOM)와 3D 프린트 파일: [TheRobotStudio/SO-ARM100](https://github.com/TheRobotStudio/SO-ARM100)
+- 판매처, 카메라, 카메라 마운트, 가격: `docs/so101-purchase.md`
 - SDK: `pip install -e ".[feetech]"` (Feetech 서보)
 - **팔로워:** STS3215 모터 6개, 전부 **1/345 기어비**
 

@@ -31,7 +31,7 @@ which is gitignored.
 |---|---|
 | `scripts/so101_sim_setup.sh` | Creates the venv, installs [so101-nexus](https://github.com/johnsutor/so101-nexus) `0.5.4`, fetches the SO-101 MJCF and STL meshes, verifies |
 | `scripts/so101_teleop.py` | Drive an SO-101 task by keyboard. Nothing is recorded |
-| `docs/` | 12 notes, listed below. Written in Korean |
+| `docs/` | 13 notes, listed below. Written in Korean |
 | `CLAUDE.md` | Working rules and environment notes |
 
 ## Drive it yourself
@@ -147,6 +147,7 @@ All notes are in Korean.
 |---|---|
 | [lerobot-hardware.md](docs/lerobot-hardware.md) | Robots and teleoperators LeRobot supports |
 | [so101-sim.md](docs/so101-sim.md) | SO-101 MuJoCo model, so101-nexus tasks, keyboard teleop |
+| [so101-purchase.md](docs/so101-purchase.md) | Where to buy an SO-101, cameras and camera mounts — vendors, contents, prices |
 
 ## Papers
 
